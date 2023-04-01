@@ -98,11 +98,13 @@ def search(input):
     for item in doc_id_list[1:]:
         union = union.union(item)
 
-    return union
+    return sorted(union)
 
 
 if __name__ == '__main__':
-    print(search('великолепный & особняк | сказка'))
-    print(search('великолепный | особняк | сказка'))
-    print(search('великолепный & !особняк | сказка'))
-    print(search('великолепный | !особняк | !сказка'))
+    exp = ['великолепный & особняк | сказка', 'великолепный | особняк | сказка', 'великолепный & !особняк | сказка', 'великолепный | !особняк | !сказка']
+    for ind, query in enumerate(exp):
+        result = search(query)
+        file = open("output/inverted_index/inverted_index_search_{}.txt".format(ind), "w", encoding="utf-8")
+        file.write(" ".join(str(item) for item in result))
+        file.close()

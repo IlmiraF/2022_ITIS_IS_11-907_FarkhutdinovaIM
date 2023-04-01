@@ -42,14 +42,20 @@ def search(query):
 
     searched_indices = sorted(distances.items(), key=operator.itemgetter(1), reverse=True)
 
+    res = dict()
     for index in searched_indices:
-        doc_id, tf_idf = index
+        doc_id, cosine = index
 
-        if tf_idf < 0.05:
+        if cosine < 0.05:
             continue
 
-        url = d[doc_id]
-        print("Index: {}\nURL:{}\nCosine:{}\n".format(doc_id, url, tf_idf))
+        res[doc_id] = cosine
+    return res
 
 if __name__ == '__main__':
-    search('Удачный крепкий брак')
+    exp = ['Удачный крепкий брак', 'Необычные музеи в Москве']
+    for ind, query in enumerate(exp):
+        result = search(query)
+        with open("output/vector_search/vector_search_{}.txt".format(ind), "w", encoding="utf-8") as f:
+            for key, value in result.items():
+                f.write('%s - %s\n' % (key, value))
